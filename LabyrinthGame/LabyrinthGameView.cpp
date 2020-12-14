@@ -46,15 +46,48 @@ BOOL CLabyrinthGameView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CLabyrinthGameView drawing
 
-void CLabyrinthGameView::OnDraw(CDC* /*pDC*/)
+void CLabyrinthGameView::OnDraw(CDC* pDC)
 {
 	CLabyrinthGameDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
-	// TODO: add draw code for native data here
+	DrawGrid(pDC);
 }
+
+void CLabyrinthGameView::DrawGrid(CDC* pDC)
+{
+	CLabyrinthGameDoc* pDoc = GetDocument();
+	//for(int i = 0; i<pDoc->grid.)
+	CPoint sPoint = CPoint(-pDoc->cellWidth+5,5);
+	int n = pDoc->grid._nRows;
+	int m = pDoc->grid._nColumns;
+	for (int i = 0; i < n; i++)
+	{
+		int curY = sPoint.y+i*pDoc->cellHeight;
+		int curX = sPoint.x;
+		for (int j = 0; j < m; j++)
+		{
+			if (pDoc->grid.grid[i][j].top)
+			{
+				pDC->MoveTo(curX, curY);
+				pDC->LineTo(curX+ pDoc->cellWidth,curY);
+
+			}
+
+			if (pDoc->grid.grid[i][j].right)
+			{
+				pDC->MoveTo(curX+ pDoc->cellWidth, curY);
+				pDC->LineTo(curX + pDoc->cellWidth, curY + pDoc->cellHeight);
+
+			}
+
+			curX += pDoc->cellWidth;
+		}
+	}
+}
+
 
 
 // CLabyrinthGameView diagnostics
@@ -78,4 +111,3 @@ CLabyrinthGameDoc* CLabyrinthGameView::GetDocument() const // non-debug version 
 #endif //_DEBUG
 
 
-// CLabyrinthGameView message handlers

@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="LabyrinthGame.h" />
     <ClInclude Include="LabyrinthGameDoc.h" />
     <ClInclude Include="LabyrinthGameView.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="LabyrinthGame.cpp" />
     <ClCompile Include="LabyrinthGameDoc.cpp" />
     <ClCompile Include="LabyrinthGameView.cpp" />

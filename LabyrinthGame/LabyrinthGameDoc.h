@@ -1,7 +1,7 @@
 
 // LabyrinthGameDoc.h : interface of the CLabyrinthGameDoc class
 //
-
+#include "Grid.h"
 
 #pragma once
 
@@ -14,7 +14,9 @@ protected: // create from serialization only
 
 // Attributes
 public:
-
+	Grid grid;
+	int cellHeight;
+	int cellWidth;
 // Operations
 public:
 

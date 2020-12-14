@@ -13,10 +13,11 @@
 
 #include <propkey.h>
 
+/*
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+*/
 // CLabyrinthGameDoc
 
 IMPLEMENT_DYNCREATE(CLabyrinthGameDoc, CDocument)
@@ -29,12 +30,15 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
-	// TODO: add one-time construction code here
+	this->grid = Grid(10,10);
+	cellHeight = 35;
+	cellWidth = 35;
 
 }
 
 CLabyrinthGameDoc::~CLabyrinthGameDoc()
 {
+
 }
 
 BOOL CLabyrinthGameDoc::OnNewDocument()

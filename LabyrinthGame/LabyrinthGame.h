@@ -28,6 +28,7 @@ public:
 	UINT  m_nAppLook;
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+
 };
 
 extern CLabyrinthGameApp theApp;

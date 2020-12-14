@@ -37,6 +37,10 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
+
+
+private:
+	void DrawGrid(CDC* pDC);
 };
 
 #ifndef _DEBUG  // debug version in LabyrinthGameView.cpp
