@@ -30,10 +30,10 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
-	this->grid = Grid(10,10);
+	this->grid = Grid(20,20);
 	cellHeight = 35;
 	cellWidth = 35;
-
+	firstDraw = true;
 }
 
 CLabyrinthGameDoc::~CLabyrinthGameDoc()

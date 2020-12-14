@@ -1,4 +1,4 @@
-
+﻿
 // LabyrinthGameView.cpp : implementation of the CLabyrinthGameView class
 //
 
@@ -42,6 +42,7 @@ BOOL CLabyrinthGameView::PreCreateWindow(CREATESTRUCT& cs)
 	//  the CREATESTRUCT cs
 
 	return CView::PreCreateWindow(cs);
+	
 }
 
 // CLabyrinthGameView drawing
@@ -60,32 +61,61 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 {
 	CLabyrinthGameDoc* pDoc = GetDocument();
 	//for(int i = 0; i<pDoc->grid.)
-	CPoint sPoint = CPoint(-pDoc->cellWidth+5,5);
+	CPoint sPoint = CPoint(5,5);
 	int n = pDoc->grid._nRows;
 	int m = pDoc->grid._nColumns;
+	int height = pDoc->cellHeight;
+	int width = pDoc->cellWidth;
+
+	pDC->MoveTo(sPoint);
+	pDC->LineTo(sPoint.x, sPoint.y+n*height);
+	pDC->MoveTo(sPoint.x, sPoint.y + n * height);
+	pDC->LineTo(sPoint.x + m*width, sPoint.y + n * height);//рисуем границы
+
 	for (int i = 0; i < n; i++)
 	{
-		int curY = sPoint.y+i*pDoc->cellHeight;
+		int curY = sPoint.y+i* height;
 		int curX = sPoint.x;
 		for (int j = 0; j < m; j++)
 		{
 			if (pDoc->grid.grid[i][j].top)
 			{
 				pDC->MoveTo(curX, curY);
-				pDC->LineTo(curX+ pDoc->cellWidth,curY);
+				pDC->LineTo(curX+ width,curY);
 
 			}
 
 			if (pDoc->grid.grid[i][j].right)
 			{
-				pDC->MoveTo(curX+ pDoc->cellWidth, curY);
-				pDC->LineTo(curX + pDoc->cellWidth, curY + pDoc->cellHeight);
+				pDC->MoveTo(curX+ width, curY);
+				pDC->LineTo(curX + width, curY + height);
 
 			}
 
-			curX += pDoc->cellWidth;
+			curX += width;
 		}
 	}
+	
+	if (pDoc->firstDraw)
+	{
+		pDoc->firstDraw = false;
+
+
+		CRect rcClient, rcWindow;
+		GetClientRect(&rcClient);
+		GetParentFrame()->GetWindowRect(&rcWindow);
+		//  Calculate the difference
+		int nWidthDiff = rcWindow.Width() - rcClient.Width();
+		int nHeightDiff = rcWindow.Height() - rcClient.Height();
+		//  Change the window size based on the size of the game board
+		rcWindow.right = rcWindow.left +
+			width * m + nWidthDiff + 10;
+		rcWindow.bottom = rcWindow.top +
+			height * n + nHeightDiff+ 10;
+		//  The MoveWindow function resizes the frame window
+		GetParentFrame()->MoveWindow(&rcWindow);
+	}
+
 }
 
 

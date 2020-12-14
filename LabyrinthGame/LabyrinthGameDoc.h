@@ -17,6 +17,7 @@ public:
 	Grid grid;
 	int cellHeight;
 	int cellWidth;
+	bool firstDraw;
 // Operations
 public:
 

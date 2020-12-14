@@ -18,4 +18,6 @@ public:
 public:
 	Grid(int nRows, int nColumns);
 	Grid();
+private:
+	void GenerateLabyrynth();
 };
