@@ -1,4 +1,4 @@
-
+﻿
 // MainFrm.cpp : implementation of the CMainFrame class
 //
 
@@ -35,9 +35,9 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if( !CFrameWnd::PreCreateWindow(cs) )
 		return FALSE;
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
 
+	cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
+		| WS_MINIMIZEBOX | WS_SYSMENU;//делаем так, чтобы окно нельзя было ресайзить
 	return TRUE;
 }
 

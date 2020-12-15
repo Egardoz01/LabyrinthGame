@@ -30,7 +30,7 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
-	this->grid = Grid(5,5);
+	this->grid = Grid(20,20);
 	cellHeight = 35;
 	cellWidth = 35;
 	Mouse_x = 10;
@@ -38,8 +38,11 @@ CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 	MouceCell_x = 0;
 	MouceCell_y = 0;
 	firstDraw = true;
-	Cheese_x = 10 + cellWidth * (grid._nColumns-1);
-	Cheese_y = 10 + cellHeight * (grid._nRows-1);
+	Cheese_x = 10 + cellWidth * (grid.nColumns-1);
+	Cheese_y = 10 + cellHeight * (grid.nRows-1);
+
+	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 }
 
 CLabyrinthGameDoc::~CLabyrinthGameDoc()

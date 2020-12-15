@@ -12,8 +12,8 @@ class Grid
 {
 public:
 	Cell **grid;
-	int _nRows;
-	int _nColumns;
+	int nRows;
+	int nColumns;
 
 public:
 	Grid(int nRows, int nColumns);

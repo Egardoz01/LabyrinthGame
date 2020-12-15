@@ -29,7 +29,6 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameView::CLabyrinthGameView() noexcept
 {
-	// TODO: add construction code here
 
 }
 
@@ -55,54 +54,38 @@ void CLabyrinthGameView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
+	DrawMouse(pDC->m_hDC);
 	DrawGrid(pDC);
 }
 
 
-HBITMAP hBitmapMouse = NULL;
-
-HBITMAP hBitmapCheese = NULL;
 
 
-LRESULT CALLBACK DrawMouse(HDC hdc, UINT message, int Mouse_x, int Mouse_y, int Cheese_x, int Cheese_y)
+
+void CLabyrinthGameView::DrawMouse(HDC hdc)
 {
-	int result = 0;
-	switch (message)
-	{
 
-	case WM_CREATE:
-		hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-		hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-		break;
-	case WM_PAINT:
-		
-		BITMAP          bitmap;
-		HDC             hdcMem;
-		HGDIOBJ         oldBitmap;
-		
-		
+	CLabyrinthGameDoc* doc = GetDocument();
+
+	BITMAP          bitmap;
+	HDC             hdcMem;
+	HGDIOBJ         oldBitmap;
+
+	hdcMem = CreateCompatibleDC(hdc);
+	oldBitmap = SelectObject(hdcMem, doc->hBitmapCheese);
+	GetObject(doc->hBitmapCheese, sizeof(bitmap), &bitmap);
+	BitBlt(hdc, doc->Cheese_x, doc->Cheese_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+	SelectObject(hdcMem, oldBitmap);
+	DeleteDC(hdcMem);
 
 
-		hdcMem = CreateCompatibleDC(hdc);
-		oldBitmap = SelectObject(hdcMem, hBitmapCheese);
-		GetObject(hBitmapCheese, sizeof(bitmap), &bitmap);
-		result = BitBlt(hdc, Cheese_x, Cheese_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
-		SelectObject(hdcMem, oldBitmap);
-		DeleteDC(hdcMem);
+	hdcMem = CreateCompatibleDC(hdc);
+	oldBitmap = SelectObject(hdcMem, doc->hBitmapMouse);
+	GetObject(doc->hBitmapMouse, sizeof(bitmap), &bitmap);
+	BitBlt(hdc, doc->Mouse_x, doc->Mouse_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+	SelectObject(hdcMem, oldBitmap);
+	DeleteDC(hdcMem);
 
-
-		hdcMem = CreateCompatibleDC(hdc);
-		oldBitmap = SelectObject(hdcMem, hBitmapMouse);
-		GetObject(hBitmapMouse, sizeof(bitmap), &bitmap);
-		result = BitBlt(hdc, Mouse_x, Mouse_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
-		SelectObject(hdcMem, oldBitmap);
-		DeleteDC(hdcMem);
-
-		break;
-	
-	
-	}
-	return 0;
 }
 
 
@@ -111,36 +94,10 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 	CLabyrinthGameDoc* doc = GetDocument();
 	//for(int i = 0; i<pDoc->grid.)
 	CPoint sPoint = CPoint(5, 5);
-	int n = doc->grid._nRows;
-	int m = doc->grid._nColumns;
+	int n = doc->grid.nRows;
+	int m = doc->grid.nColumns;
 	int height = doc->cellHeight;
 	int width = doc->cellWidth;
-
-	if (doc->firstDraw)
-	{
-		doc->firstDraw = false;
-
-
-		CRect rcClient, rcWindow;
-		GetClientRect(&rcClient);
-		GetParentFrame()->GetWindowRect(&rcWindow);
-		//  Calculate the difference
-		int nWidthDiff = rcWindow.Width() - rcClient.Width();
-		int nHeightDiff = rcWindow.Height() - rcClient.Height();
-		//  Change the window size based on the size of the game board
-		rcWindow.right = rcWindow.left +
-			width * m + nWidthDiff + 10;
-		rcWindow.bottom = rcWindow.top +
-			height * n + nHeightDiff + 10;
-		//  The MoveWindow function resizes the frame window
-		GetParentFrame()->MoveWindow(&rcWindow);
-
-		DrawMouse(pDC->m_hDC, WM_CREATE, doc->Mouse_x, doc->Mouse_y, doc->Cheese_x, doc->Cheese_y);
-	}
-
-
-
-	DrawMouse(pDC->m_hDC, WM_PAINT, doc->Mouse_x, doc->Mouse_y, doc->Cheese_x, doc->Cheese_y);
 
 	pDC->MoveTo(sPoint);
 	pDC->LineTo(sPoint.x, sPoint.y + n * height);
@@ -170,12 +127,6 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 			curX += width;
 		}
 	}
-
-	
-
-
-	
-
 }
 
 
@@ -219,7 +170,7 @@ void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		break;
 	case VK_RIGHT:	// стрелка вправо
-		if (doc->MouceCell_x < doc->grid._nColumns-1)
+		if (doc->MouceCell_x < doc->grid.nColumns-1)
 		{
 			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x].right == false)
 			{
@@ -239,7 +190,7 @@ void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		break;
 	case VK_DOWN:		// стрелка вверх
-		if (doc->MouceCell_y < doc->grid._nRows - 1)
+		if (doc->MouceCell_y < doc->grid.nRows - 1)
 		{
 			if (doc->grid.grid[doc->MouceCell_y+1][doc->MouceCell_x].top == false)
 			{
@@ -252,4 +203,44 @@ void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	this->RedrawWindow();
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+
+void CLabyrinthGameView::ResizeWindow()
+{
+
+	CLabyrinthGameDoc* doc = GetDocument();
+
+	ASSERT_VALID(doc);
+	if (!doc)
+		return;
+	if (doc->firstDraw)
+	{
+		doc->firstDraw = false;
+
+
+		CRect rcClient, rcWindow;
+		GetClientRect(&rcClient);
+		GetParentFrame()->GetWindowRect(&rcWindow);
+		
+		int nWidthDiff = rcWindow.Width() - rcClient.Width();
+		int nHeightDiff = rcWindow.Height() - rcClient.Height();
+	
+		rcWindow.right = rcWindow.left +
+			doc->cellWidth * doc->grid.nColumns + nWidthDiff + 10;
+		rcWindow.bottom = rcWindow.top +
+			doc->cellHeight * doc->grid.nRows + nHeightDiff + 10;
+
+		GetParentFrame()->MoveWindow(&rcWindow);
+
+
+	}
+}
+
+
+void CLabyrinthGameView::OnInitialUpdate()
+{
+	CView::OnInitialUpdate();
+
+	ResizeWindow();
 }

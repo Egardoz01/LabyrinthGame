@@ -6,15 +6,15 @@
 #include <utility>
 #include <vector>
 
-Grid::Grid(int nRows, int nColumns)
+Grid::Grid(int _nRows, int _nColumns)
 {
-
+	nRows = _nRows;
+	nColumns = _nColumns;
 
 	this->grid = new Cell*[nRows];
 	for (int i = 0; i < nRows; i++)
 		this->grid[i] = new Cell[nColumns];
-	_nRows = nRows;
-	_nColumns = nColumns;
+	
 	for (int i = 0; i < nRows; i++)
 		for (int j = 0; j < nColumns; j++)
 		{
@@ -34,12 +34,11 @@ void Grid::GenerateLabyrynth()
 {
 	std::stack<std::pair<int,int>> st;
 	srand(time(NULL));
-	int x = rand() % _nColumns;
-	int y = rand() % _nRows;
+	int x = rand() % nColumns;
+	int y = rand() % nRows;
 	st.push({ x,y });
-	std::vector<std::vector<int>> visited(_nRows, std::vector<int>(_nColumns));
-	//visited[x][y] = true;
-	std::vector<std::vector<std::pair<int, int>>> parent(_nRows, std::vector < std::pair<int, int >> (_nColumns));
+	std::vector<std::vector<int>> visited(nRows, std::vector<int>(nColumns));
+	std::vector<std::vector<std::pair<int, int>>> parent(nRows, std::vector < std::pair<int, int >> (nColumns));
 	while (!st.empty())
 	{
 
@@ -80,10 +79,10 @@ void Grid::GenerateLabyrynth()
 		if (y > 0)
 			if (!visited[y-1][x])
 				next.push_back('t');
-		if (x < _nColumns-1)
+		if (x < nColumns-1)
 			if (!visited[y][x+1])
 				next.push_back('r');
-		if (y < _nRows - 1)
+		if (y < nRows - 1)
 			if (!visited[y +1][x])
 				next.push_back('b');
 		

@@ -41,8 +41,12 @@ protected:
 
 private:
 	void DrawGrid(CDC* pDC);
+	void DrawMouse(HDC hdc);
+	void ResizeWindow();
 public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+//	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+	virtual void OnInitialUpdate();
 };
 
 #ifndef _DEBUG  // debug version in LabyrinthGameView.cpp

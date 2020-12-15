@@ -24,6 +24,8 @@ public:
 	int Cheese_y;
 	int MouceCell_x;
 	int MouceCell_y;
+	HBITMAP hBitmapMouse;
+	HBITMAP hBitmapCheese;
 // Operations
 public:
 
