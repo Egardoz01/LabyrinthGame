@@ -41,6 +41,8 @@ protected:
 
 private:
 	void DrawGrid(CDC* pDC);
+public:
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // debug version in LabyrinthGameView.cpp
