@@ -18,6 +18,12 @@ public:
 	int cellHeight;
 	int cellWidth;
 	bool firstDraw;
+	int Mouse_x;
+	int Mouse_y;
+	int Cheese_x;
+	int Cheese_y;
+	int MouceCell_x;
+	int MouceCell_y;
 // Operations
 public:
 

@@ -59,43 +59,47 @@ void CLabyrinthGameView::OnDraw(CDC* pDC)
 }
 
 
-HBITMAP hBitmap = NULL;
+HBITMAP hBitmapMouse = NULL;
 
-int x_mouse=10, y_mouse=10;
+HBITMAP hBitmapCheese = NULL;
 
-LRESULT CALLBACK DrawMouse(HDC hdc, UINT message)
+
+LRESULT CALLBACK DrawMouse(HDC hdc, UINT message, int Mouse_x, int Mouse_y, int Cheese_x, int Cheese_y)
 {
 	int result = 0;
 	switch (message)
 	{
 
 	case WM_CREATE:
-		hBitmap = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		break;
 	case WM_PAINT:
-		PAINTSTRUCT     ps;
 		
 		BITMAP          bitmap;
 		HDC             hdcMem;
 		HGDIOBJ         oldBitmap;
 		
-		//hdc = BeginPaint(hWnd, &ps);
+		
+
 
 		hdcMem = CreateCompatibleDC(hdc);
-		oldBitmap = SelectObject(hdcMem, hBitmap);
-
-		GetObject(hBitmap, sizeof(bitmap), &bitmap);
-		result = BitBlt(hdc, x_mouse, y_mouse, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
-	
+		oldBitmap = SelectObject(hdcMem, hBitmapCheese);
+		GetObject(hBitmapCheese, sizeof(bitmap), &bitmap);
+		result = BitBlt(hdc, Cheese_x, Cheese_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
 		SelectObject(hdcMem, oldBitmap);
 		DeleteDC(hdcMem);
 
-		//EndPaint(hWnd, &ps);
+
+		hdcMem = CreateCompatibleDC(hdc);
+		oldBitmap = SelectObject(hdcMem, hBitmapMouse);
+		GetObject(hBitmapMouse, sizeof(bitmap), &bitmap);
+		result = BitBlt(hdc, Mouse_x, Mouse_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+		SelectObject(hdcMem, oldBitmap);
+		DeleteDC(hdcMem);
+
 		break;
-	case WM_DESTROY:
-		DeleteObject(hBitmap);
-		PostQuitMessage(0);
-		break;
+	
 	
 	}
 	return 0;
@@ -104,17 +108,17 @@ LRESULT CALLBACK DrawMouse(HDC hdc, UINT message)
 
 void CLabyrinthGameView::DrawGrid(CDC* pDC)
 {
-	CLabyrinthGameDoc* pDoc = GetDocument();
+	CLabyrinthGameDoc* doc = GetDocument();
 	//for(int i = 0; i<pDoc->grid.)
 	CPoint sPoint = CPoint(5, 5);
-	int n = pDoc->grid._nRows;
-	int m = pDoc->grid._nColumns;
-	int height = pDoc->cellHeight;
-	int width = pDoc->cellWidth;
+	int n = doc->grid._nRows;
+	int m = doc->grid._nColumns;
+	int height = doc->cellHeight;
+	int width = doc->cellWidth;
 
-	if (pDoc->firstDraw)
+	if (doc->firstDraw)
 	{
-		pDoc->firstDraw = false;
+		doc->firstDraw = false;
 
 
 		CRect rcClient, rcWindow;
@@ -131,12 +135,12 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 		//  The MoveWindow function resizes the frame window
 		GetParentFrame()->MoveWindow(&rcWindow);
 
-		DrawMouse(pDC->m_hDC, WM_CREATE);
+		DrawMouse(pDC->m_hDC, WM_CREATE, doc->Mouse_x, doc->Mouse_y, doc->Cheese_x, doc->Cheese_y);
 	}
 
 
 
-	DrawMouse(pDC->m_hDC, WM_PAINT);
+	DrawMouse(pDC->m_hDC, WM_PAINT, doc->Mouse_x, doc->Mouse_y, doc->Cheese_x, doc->Cheese_y);
 
 	pDC->MoveTo(sPoint);
 	pDC->LineTo(sPoint.x, sPoint.y + n * height);
@@ -149,14 +153,14 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 		int curX = sPoint.x;
 		for (int j = 0; j < m; j++)
 		{
-			if (pDoc->grid.grid[i][j].top)
+			if (doc->grid.grid[i][j].top)
 			{
 				pDC->MoveTo(curX, curY);
 				pDC->LineTo(curX + width, curY);
 
 			}
 
-			if (pDoc->grid.grid[i][j].right)
+			if (doc->grid.grid[i][j].right)
 			{
 				pDC->MoveTo(curX + width, curY);
 				pDC->LineTo(curX + width, curY + height);
@@ -200,21 +204,49 @@ CLabyrinthGameDoc* CLabyrinthGameView::GetDocument() const // non-debug version 
 
 void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	CLabyrinthGameDoc* doc = GetDocument();
 
 	switch (nChar)
 	{
 	case VK_LEFT:	// стрелка влево
-		x_mouse -= 35;
+		if (doc->MouceCell_x > 0)
+		{
+			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x - 1].right == false)
+			{
+				doc->MouceCell_x--;
+				doc->Mouse_x -= doc->cellWidth;
+			}
+		}
 		break;
 	case VK_RIGHT:	// стрелка вправо
-	
-		x_mouse += 35;
+		if (doc->MouceCell_x < doc->grid._nColumns-1)
+		{
+			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x].right == false)
+			{
+				doc->MouceCell_x++;
+				doc->Mouse_x += doc->cellWidth;
+			}
+		}
 		break;
 	case VK_UP:		// стрелка вверх
-		y_mouse -= 35;
+		if (doc->MouceCell_y > 0)
+		{
+			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x].top == false)
+			{
+				doc->MouceCell_y--;
+				doc->Mouse_y -= doc->cellHeight;
+			}
+		}
 		break;
 	case VK_DOWN:		// стрелка вверх
-		y_mouse += 35;
+		if (doc->MouceCell_y < doc->grid._nRows - 1)
+		{
+			if (doc->grid.grid[doc->MouceCell_y+1][doc->MouceCell_x].top == false)
+			{
+				doc->MouceCell_y++;
+				doc->Mouse_y += doc->cellHeight;
+			}
+		}
 		break;
 	}
 

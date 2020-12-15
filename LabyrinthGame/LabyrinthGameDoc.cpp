@@ -30,10 +30,16 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
-	this->grid = Grid(20,20);
+	this->grid = Grid(5,5);
 	cellHeight = 35;
 	cellWidth = 35;
+	Mouse_x = 10;
+	Mouse_y = 10;
+	MouceCell_x = 0;
+	MouceCell_y = 0;
 	firstDraw = true;
+	Cheese_x = 10 + cellWidth * (grid._nColumns-1);
+	Cheese_y = 10 + cellHeight * (grid._nRows-1);
 }
 
 CLabyrinthGameDoc::~CLabyrinthGameDoc()

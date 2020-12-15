@@ -212,6 +212,8 @@
     <None Include="res\LabyrinthGame.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="cheese.bmp" />
+    <Image Include="mouse.bmp" />
     <Image Include="res\LabyrinthGame.ico" />
     <Image Include="res\LabyrinthGameDoc.ico" />
   </ItemGroup>
