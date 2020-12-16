@@ -89,5 +89,8 @@
     <Image Include="mouse.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="congratulations.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

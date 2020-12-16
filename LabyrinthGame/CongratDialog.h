@@ -22,4 +22,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CString strCongrText;
+//	afx_msg void OnStnClickedCongrattext();
 };

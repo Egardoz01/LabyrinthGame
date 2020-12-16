@@ -34,6 +34,7 @@ public:
 public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	void KillMainTimer();
 protected:
 
 // Implementation
@@ -55,7 +56,7 @@ private:
 	void DrawGrid(CDC* pDC);
 	void DrawMouse(HDC hdc);
 	void ResizeWindow();
-	void KillMainTimer();
+
 public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 //	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);

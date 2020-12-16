@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="cheese.bmp" />
+    <Image Include="congratulations.bmp" />
     <Image Include="mouse.bmp" />
     <Image Include="res\LabyrinthGame.ico" />
     <Image Include="res\LabyrinthGameDoc.ico" />

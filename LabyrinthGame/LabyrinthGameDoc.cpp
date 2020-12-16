@@ -10,7 +10,7 @@
 #endif
 
 #include "LabyrinthGameDoc.h"
-
+#include "LabyrinthGameView.h"
 #include <propkey.h>
 #include "CongratDialog.h"
 
@@ -35,7 +35,7 @@ CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
 
 	
-	this->LGrid = Grid(20,20);
+	this->LGrid = Grid(5,5);
 	
 	MouceCell_x = 0;
 	MouceCell_y = 0;
@@ -52,8 +52,26 @@ void CLabyrinthGameDoc::DoCongratulations(CString text)
 	dlg.DoModal();
 }
 
+void CLabyrinthGameDoc::CheckForGameFinish()
+{
+	if (MouceCell_x == CheeseCell_x && MouceCell_y == CheeseCell_y)
+	{
+		FinishGame();
+	}
+}
+
 void CLabyrinthGameDoc::FinishGame()
 {
+	CLabyrinthGameView * curView = NULL;
+	POSITION pos = GetFirstViewPosition();
+	if (pos != NULL)
+		curView = (CLabyrinthGameView*)GetNextView(pos);
+	curView->KillMainTimer();
+	CString strCongratulations;
+	strCongratulations.Format(_T("CONGRATULATIONS!!! IT TOOK %d sec to pass the labyrinth"), CurSeconds);
+
+	DoCongratulations(strCongratulations);
+
 }
 
 void CLabyrinthGameDoc::RightStep()
@@ -115,6 +133,7 @@ BOOL CLabyrinthGameDoc::OnNewDocument()
 
 	return TRUE;
 }
+
 
 
 

@@ -30,7 +30,14 @@ void CongratDialog::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CongratDialog, CDialogEx)
+//	ON_STN_CLICKED(IDC_CongratText, &CongratDialog::OnStnClickedCongrattext)
 END_MESSAGE_MAP()
 
 
 // CongratDialog message handlers
+
+
+//void CongratDialog::OnStnClickedCongrattext()
+//{
+//	// TODO: Add your control notification handler code here
+//}

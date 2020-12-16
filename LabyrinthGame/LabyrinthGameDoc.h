@@ -37,7 +37,7 @@ public:
 // Implementation
 public:
 	void DoCongratulations(CString text);
-	void FinishGame();
+	void CheckForGameFinish();
 	void RightStep();
 	void LeftStep();
 	void UpStep();
@@ -48,7 +48,9 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 
 #endif
+private:
 
+	void FinishGame();
 protected:
 
 // Generated message map functions
