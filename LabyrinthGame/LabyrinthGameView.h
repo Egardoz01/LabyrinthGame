@@ -35,7 +35,6 @@ public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	void KillMainTimer();
-	void StartGame();
 protected:
 
 // Implementation

@@ -232,7 +232,22 @@ void CLabyrinthGameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
-	StartGame();
+	cellHeight = 35;
+	cellWidth = 35;
+	sPoint = CPoint(5, 50);
+	
+
+	
+	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+	ResizeWindow();
+
+	
+    mainTimer = SetTimer(1, 1000, NULL);
+
+	GetDocument()->CurSeconds = 0;
+
 }
 
 
@@ -247,25 +262,4 @@ void CLabyrinthGameView::OnTimer(UINT_PTR nIDEvent)
 void CLabyrinthGameView::KillMainTimer()
 {
 	KillTimer(mainTimer);
-}
-
-void CLabyrinthGameView::StartGame()
-{
-	cellHeight = 35;
-	cellWidth = 35;
-	sPoint = CPoint(5, 50);
-
-
-
-	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-
-	ResizeWindow();
-
-
-	mainTimer = SetTimer(1, 1000, NULL);
-
-	GetDocument()->CurSeconds = 0;
-
-
 }
