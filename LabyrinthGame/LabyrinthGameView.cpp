@@ -23,7 +23,10 @@ IMPLEMENT_DYNCREATE(CLabyrinthGameView, CView)
 
 BEGIN_MESSAGE_MAP(CLabyrinthGameView, CView)
 	ON_WM_KEYDOWN()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
+
+
 
 // CLabyrinthGameView construction/destruction
 
@@ -93,7 +96,7 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 {
 	CLabyrinthGameDoc* doc = GetDocument();
 	//for(int i = 0; i<pDoc->grid.)
-	CPoint sPoint = CPoint(5, 5);
+	CPoint sPoint = doc->sPoint;
 	int n = doc->grid.nRows;
 	int m = doc->grid.nColumns;
 	int height = doc->cellHeight;
@@ -103,6 +106,13 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 	pDC->LineTo(sPoint.x, sPoint.y + n * height);
 	pDC->MoveTo(sPoint.x, sPoint.y + n * height);
 	pDC->LineTo(sPoint.x + m * width, sPoint.y + n * height);//рисуем границы
+	RECT rect;
+	rect.left = 5;
+	rect.top = 5;
+	CString strTime;
+	strTime.Format(_T("Текущее время %d%d:%d%d"), ((curSeconds / 600) % 10), ((curSeconds / 60) % 10), ((curSeconds / 10)%6), (curSeconds % 10));
+
+	pDC->DrawText(strTime, &rect, DT_SINGLELINE | DT_NOCLIP);
 
 	for (int i = 0; i < n; i++)
 	{
@@ -227,9 +237,9 @@ void CLabyrinthGameView::ResizeWindow()
 		int nHeightDiff = rcWindow.Height() - rcClient.Height();
 	
 		rcWindow.right = rcWindow.left +
-			doc->cellWidth * doc->grid.nColumns + nWidthDiff + 10;
+			doc->cellWidth * doc->grid.nColumns + nWidthDiff + doc->sPoint.x+5;
 		rcWindow.bottom = rcWindow.top +
-			doc->cellHeight * doc->grid.nRows + nHeightDiff + 10;
+			doc->cellHeight * doc->grid.nRows + nHeightDiff + +doc->sPoint.y + 5;
 
 		GetParentFrame()->MoveWindow(&rcWindow);
 
@@ -243,4 +253,15 @@ void CLabyrinthGameView::OnInitialUpdate()
 	CView::OnInitialUpdate();
 
 	ResizeWindow();
+
+	UINT_PTR myTimer = SetTimer(1, 1000, NULL);
+	curSeconds = 0;
+}
+
+
+void CLabyrinthGameView::OnTimer(UINT_PTR nIDEvent)
+{
+	curSeconds++;
+	this->RedrawWindow();
+	CView::OnTimer(nIDEvent);
 }

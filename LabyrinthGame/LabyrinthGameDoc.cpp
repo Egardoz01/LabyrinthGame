@@ -20,6 +20,8 @@
 */
 // CLabyrinthGameDoc
 
+
+
 IMPLEMENT_DYNCREATE(CLabyrinthGameDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLabyrinthGameDoc, CDocument)
@@ -30,16 +32,18 @@ END_MESSAGE_MAP()
 
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
+
+	sPoint = CPoint(5,50);
 	this->grid = Grid(20,20);
 	cellHeight = 35;
 	cellWidth = 35;
-	Mouse_x = 10;
-	Mouse_y = 10;
+	Mouse_x = sPoint.x+5;
+	Mouse_y = sPoint.y + 5;
 	MouceCell_x = 0;
 	MouceCell_y = 0;
 	firstDraw = true;
-	Cheese_x = 10 + cellWidth * (grid.nColumns-1);
-	Cheese_y = 10 + cellHeight * (grid.nRows-1);
+	Cheese_x = sPoint.x + 5 + cellWidth * (grid.nColumns-1);
+	Cheese_y = sPoint.y + 5 + cellHeight * (grid.nRows-1);
 
 	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);

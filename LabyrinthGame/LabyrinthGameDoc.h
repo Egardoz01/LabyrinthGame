@@ -26,6 +26,7 @@ public:
 	int MouceCell_y;
 	HBITMAP hBitmapMouse;
 	HBITMAP hBitmapCheese;
+	CPoint sPoint;
 // Operations
 public:
 
