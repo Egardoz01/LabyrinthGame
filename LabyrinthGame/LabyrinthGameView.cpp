@@ -74,18 +74,27 @@ void CLabyrinthGameView::DrawMouse(HDC hdc)
 	HDC             hdcMem;
 	HGDIOBJ         oldBitmap;
 
+
+	cheese_x = sPoint.x + 5 + cellWidth * doc->CheeseCell_x;
+	cheese_y = sPoint.y + 5 + cellHeight * doc->CheeseCell_y;
+
+
+
 	hdcMem = CreateCompatibleDC(hdc);
-	oldBitmap = SelectObject(hdcMem, doc->hBitmapCheese);
-	GetObject(doc->hBitmapCheese, sizeof(bitmap), &bitmap);
-	BitBlt(hdc, doc->Cheese_x, doc->Cheese_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+	oldBitmap = SelectObject(hdcMem, hBitmapCheese);
+	GetObject(hBitmapCheese, sizeof(bitmap), &bitmap);
+	BitBlt(hdc, cheese_x, cheese_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
 	SelectObject(hdcMem, oldBitmap);
 	DeleteDC(hdcMem);
 
 
+	mouse_x = sPoint.x + 5 + doc->MouceCell_x*cellWidth;
+	mouse_y = sPoint.y + 5 + doc->MouceCell_y*cellHeight;
+
 	hdcMem = CreateCompatibleDC(hdc);
-	oldBitmap = SelectObject(hdcMem, doc->hBitmapMouse);
-	GetObject(doc->hBitmapMouse, sizeof(bitmap), &bitmap);
-	BitBlt(hdc, doc->Mouse_x, doc->Mouse_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+	oldBitmap = SelectObject(hdcMem, hBitmapMouse);
+	GetObject(hBitmapMouse, sizeof(bitmap), &bitmap);
+	BitBlt(hdc, mouse_x, mouse_y, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
 	SelectObject(hdcMem, oldBitmap);
 	DeleteDC(hdcMem);
 
@@ -96,11 +105,11 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 {
 	CLabyrinthGameDoc* doc = GetDocument();
 	//for(int i = 0; i<pDoc->grid.)
-	CPoint sPoint = doc->sPoint;
-	int n = doc->grid.nRows;
-	int m = doc->grid.nColumns;
-	int height = doc->cellHeight;
-	int width = doc->cellWidth;
+	
+	int n = doc->LGrid.nRows;
+	int m = doc->LGrid.nColumns;
+	int height = cellHeight;
+	int width = cellWidth;
 
 	pDC->MoveTo(sPoint);
 	pDC->LineTo(sPoint.x, sPoint.y + n * height);
@@ -110,7 +119,7 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 	rect.left = 5;
 	rect.top = 5;
 	CString strTime;
-	strTime.Format(_T("Текущее время %d%d:%d%d"), ((curSeconds / 600) % 10), ((curSeconds / 60) % 10), ((curSeconds / 10)%6), (curSeconds % 10));
+	strTime.Format(_T("Текущее время %d%d:%d%d"), ((doc->CurSeconds / 600) % 10), ((doc->CurSeconds / 60) % 10), ((doc->CurSeconds / 10)%6), (doc->CurSeconds % 10));
 
 	pDC->DrawText(strTime, &rect, DT_SINGLELINE | DT_NOCLIP);
 
@@ -120,14 +129,14 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 		int curX = sPoint.x;
 		for (int j = 0; j < m; j++)
 		{
-			if (doc->grid.grid[i][j].top)
+			if (doc->LGrid.grid[i][j].top)
 			{
 				pDC->MoveTo(curX, curY);
 				pDC->LineTo(curX + width, curY);
 
 			}
 
-			if (doc->grid.grid[i][j].right)
+			if (doc->LGrid.grid[i][j].right)
 			{
 				pDC->MoveTo(curX + width, curY);
 				pDC->LineTo(curX + width, curY + height);
@@ -170,44 +179,16 @@ void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	switch (nChar)
 	{
 	case VK_LEFT:	// стрелка влево
-		if (doc->MouceCell_x > 0)
-		{
-			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x - 1].right == false)
-			{
-				doc->MouceCell_x--;
-				doc->Mouse_x -= doc->cellWidth;
-			}
-		}
+		doc->LeftStep();
 		break;
 	case VK_RIGHT:	// стрелка вправо
-		if (doc->MouceCell_x < doc->grid.nColumns-1)
-		{
-			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x].right == false)
-			{
-				doc->MouceCell_x++;
-				doc->Mouse_x += doc->cellWidth;
-			}
-		}
+		doc->RightStep();
 		break;
 	case VK_UP:		// стрелка вверх
-		if (doc->MouceCell_y > 0)
-		{
-			if (doc->grid.grid[doc->MouceCell_y][doc->MouceCell_x].top == false)
-			{
-				doc->MouceCell_y--;
-				doc->Mouse_y -= doc->cellHeight;
-			}
-		}
+		doc->UpStep();
 		break;
 	case VK_DOWN:		// стрелка вверх
-		if (doc->MouceCell_y < doc->grid.nRows - 1)
-		{
-			if (doc->grid.grid[doc->MouceCell_y+1][doc->MouceCell_x].top == false)
-			{
-				doc->MouceCell_y++;
-				doc->Mouse_y += doc->cellHeight;
-			}
-		}
+		doc->DownStep();
 		break;
 	}
 
@@ -224,44 +205,60 @@ void CLabyrinthGameView::ResizeWindow()
 	ASSERT_VALID(doc);
 	if (!doc)
 		return;
-	if (doc->firstDraw)
-	{
-		doc->firstDraw = false;
-
-
-		CRect rcClient, rcWindow;
-		GetClientRect(&rcClient);
-		GetParentFrame()->GetWindowRect(&rcWindow);
-		
-		int nWidthDiff = rcWindow.Width() - rcClient.Width();
-		int nHeightDiff = rcWindow.Height() - rcClient.Height();
 	
-		rcWindow.right = rcWindow.left +
-			doc->cellWidth * doc->grid.nColumns + nWidthDiff + doc->sPoint.x+5;
-		rcWindow.bottom = rcWindow.top +
-			doc->cellHeight * doc->grid.nRows + nHeightDiff + +doc->sPoint.y + 5;
 
-		GetParentFrame()->MoveWindow(&rcWindow);
+	CRect rcClient, rcWindow;
+	GetClientRect(&rcClient);
+	GetParentFrame()->GetWindowRect(&rcWindow);
+		
+	int nWidthDiff = rcWindow.Width() - rcClient.Width();
+	int nHeightDiff = rcWindow.Height() - rcClient.Height();
+	
+	rcWindow.right = rcWindow.left +
+		cellWidth * doc->LGrid.nColumns + nWidthDiff + sPoint.x+5;
+	rcWindow.bottom = rcWindow.top +
+		cellHeight * doc->LGrid.nRows + nHeightDiff + sPoint.y + 5;
+
+	GetParentFrame()->MoveWindow(&rcWindow);
 
 
-	}
+	
 }
+
 
 
 void CLabyrinthGameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
+	cellHeight = 35;
+	cellWidth = 35;
+	sPoint = CPoint(5, 50);
+	
+
+	
+	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
 	ResizeWindow();
 
-	UINT_PTR myTimer = SetTimer(1, 1000, NULL);
-	curSeconds = 0;
+	
+    mainTimer = SetTimer(1, 1000, NULL);
+
+	GetDocument()->CurSeconds = 0;
+
 }
 
 
 void CLabyrinthGameView::OnTimer(UINT_PTR nIDEvent)
 {
-	curSeconds++;
+	GetDocument()->CurSeconds++;
 	this->RedrawWindow();
+
 	CView::OnTimer(nIDEvent);
+}
+
+void CLabyrinthGameView::KillMainTimer()
+{
+	KillTimer(mainTimer);
 }

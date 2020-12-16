@@ -14,19 +14,13 @@ protected: // create from serialization only
 
 // Attributes
 public:
-	Grid grid;
-	int cellHeight;
-	int cellWidth;
-	bool firstDraw;
-	int Mouse_x;
-	int Mouse_y;
-	int Cheese_x;
-	int Cheese_y;
+	Grid LGrid;
 	int MouceCell_x;
 	int MouceCell_y;
-	HBITMAP hBitmapMouse;
-	HBITMAP hBitmapCheese;
-	CPoint sPoint;
+	int CheeseCell_x;
+	int CheeseCell_y;
+	int CurSeconds;
+	
 // Operations
 public:
 
@@ -34,6 +28,7 @@ public:
 public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
+	
 #ifdef SHARED_HANDLERS
 	virtual void InitializeSearchContent();
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
@@ -41,10 +36,17 @@ public:
 
 // Implementation
 public:
+	void DoCongratulations(CString text);
+	void FinishGame();
+	void RightStep();
+	void LeftStep();
+	void UpStep();
+	void DownStep();
 	virtual ~CLabyrinthGameDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
+
 #endif
 
 protected:

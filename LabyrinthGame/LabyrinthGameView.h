@@ -14,6 +14,18 @@ protected: // create from serialization only
 // Attributes
 public:
 	CLabyrinthGameDoc* GetDocument() const;
+private:
+	int mouse_x;
+	int mouse_y;
+	int cheese_x;
+	int cheese_y;
+
+	int cellHeight;
+	int cellWidth;
+	HBITMAP hBitmapMouse;
+	HBITMAP hBitmapCheese;
+	CPoint sPoint;
+	UINT_PTR mainTimer;
 
 // Operations
 public:
@@ -43,7 +55,7 @@ private:
 	void DrawGrid(CDC* pDC);
 	void DrawMouse(HDC hdc);
 	void ResizeWindow();
-	int curSeconds;
+	void KillMainTimer();
 public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 //	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);

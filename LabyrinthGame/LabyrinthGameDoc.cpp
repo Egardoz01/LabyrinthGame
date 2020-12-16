@@ -12,6 +12,7 @@
 #include "LabyrinthGameDoc.h"
 
 #include <propkey.h>
+#include "CongratDialog.h"
 
 /*
 #ifdef _DEBUG
@@ -33,20 +34,70 @@ END_MESSAGE_MAP()
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
 
-	sPoint = CPoint(5,50);
-	this->grid = Grid(20,20);
-	cellHeight = 35;
-	cellWidth = 35;
-	Mouse_x = sPoint.x+5;
-	Mouse_y = sPoint.y + 5;
+	
+	this->LGrid = Grid(20,20);
+	
 	MouceCell_x = 0;
 	MouceCell_y = 0;
-	firstDraw = true;
-	Cheese_x = sPoint.x + 5 + cellWidth * (grid.nColumns-1);
-	Cheese_y = sPoint.y + 5 + cellHeight * (grid.nRows-1);
+	CheeseCell_x = LGrid.nColumns - 1;
+	CheeseCell_y = LGrid.nRows - 1;
 
-	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	
+}
+
+void CLabyrinthGameDoc::DoCongratulations(CString text)
+{
+	CongratDialog dlg;
+	dlg.strCongrText = text;
+	dlg.DoModal();
+}
+
+void CLabyrinthGameDoc::FinishGame()
+{
+}
+
+void CLabyrinthGameDoc::RightStep()
+{
+	if (MouceCell_x < LGrid.nColumns - 1)
+	{
+		if (LGrid.grid[MouceCell_y][MouceCell_x].right == false)
+		{
+			MouceCell_x++;
+		}
+	}
+}
+
+void CLabyrinthGameDoc::LeftStep()
+{
+	if (MouceCell_x > 0)
+	{
+		if (LGrid.grid[MouceCell_y][MouceCell_x - 1].right == false)
+		{
+			MouceCell_x--;
+		}
+	}
+}
+
+void CLabyrinthGameDoc::UpStep()
+{
+	if (MouceCell_y > 0)
+	{
+		if (LGrid.grid[MouceCell_y][MouceCell_x].top == false)
+		{
+			MouceCell_y--;
+		}
+	}
+}
+
+void CLabyrinthGameDoc::DownStep()
+{
+	if (MouceCell_y < LGrid.nRows - 1)
+	{
+		if (LGrid.grid[MouceCell_y + 1][MouceCell_x].top == false)
+		{
+			MouceCell_y++;
+		}
+	}
 }
 
 CLabyrinthGameDoc::~CLabyrinthGameDoc()
