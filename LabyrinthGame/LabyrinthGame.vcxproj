@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CongratDialog.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="LabyrinthGame.h" />
     <ClInclude Include="LabyrinthGameDoc.h" />
@@ -195,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CongratDialog.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="LabyrinthGame.cpp" />
     <ClCompile Include="LabyrinthGameDoc.cpp" />
