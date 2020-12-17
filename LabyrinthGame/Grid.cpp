@@ -1,4 +1,4 @@
-
+﻿
 #include "stdafx.h"
 #include "Grid.h"
 #include <stack>
@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-Grid::Grid(int _nRows, int _nColumns)
+void Grid::Initialize(int _nRows, int _nColumns)
 {
 	nRows = _nRows;
 	nColumns = _nColumns;
@@ -120,4 +120,40 @@ void Grid::GenerateLabyrynth()
 	}
 
 	int a = 1;
+}
+
+void  Grid::Serialize(CArchive& ar)
+{
+	if (ar.IsStoring())
+	{
+		ar << nRows << nColumns;
+	}
+	else
+	{
+		ar >> nRows >> nColumns;
+	}
+
+	for (int i = 0; i < nRows; i++)
+		for (int j = 0; j < nColumns; j++)
+			grid[i][j].Serialize(ar);
+}
+
+IMPLEMENT_SERIAL(Grid, CObject, 1) // Класс, баз.класс, версия
+
+void Cell::Serialize(CArchive & ar)
+{
+	if (ar.IsStoring())
+	{
+		ar << top << right;
+	}
+	else
+	{
+		ar >> top >> right;
+	}
+}
+
+IMPLEMENT_SERIAL(Cell, CObject, 1) // Класс, баз.класс, версия
+
+Cell::Cell()
+{
 }

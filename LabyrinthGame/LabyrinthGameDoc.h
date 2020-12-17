@@ -20,6 +20,7 @@ public:
 	int CheeseCell_x;
 	int CheeseCell_y;
 	int CurSeconds;
+	bool LoadSave;
 	
 // Operations
 public:

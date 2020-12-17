@@ -97,6 +97,8 @@ BOOL CLabyrinthGameApp::InitInstance()
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
 
+	EnableShellOpen();
+	RegisterShellFileTypes();
 
 	// Parse command line for standard shell commands, DDE, file open
 	CCommandLineInfo cmdInfo;

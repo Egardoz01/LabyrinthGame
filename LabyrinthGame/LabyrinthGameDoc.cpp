@@ -35,14 +35,14 @@ CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
 
 	
-	this->LGrid = Grid(5,5);
+	LGrid.Initialize(5, 5);
 	
 	MouceCell_x = 0;
 	MouceCell_y = 0;
 	CheeseCell_x = LGrid.nColumns - 1;
 	CheeseCell_y = LGrid.nRows - 1;
 
-	
+	CurSeconds = 0;
 }
 
 void CLabyrinthGameDoc::DoCongratulations(CString text)
@@ -144,12 +144,15 @@ void CLabyrinthGameDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		ar << MouceCell_x << MouceCell_y << CheeseCell_x << CheeseCell_y << CurSeconds;
 	}
 	else
 	{
-		// TODO: add loading code here
+		ar >> MouceCell_x >> MouceCell_y >> CheeseCell_x >> CheeseCell_y >> CurSeconds;
+		LoadSave = true;
 	}
+
+	LGrid.Serialize(ar);
 }
 
 #ifdef SHARED_HANDLERS

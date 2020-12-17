@@ -246,8 +246,6 @@ void CLabyrinthGameView::OnInitialUpdate()
 	
     mainTimer = SetTimer(1, 1000, NULL);
 
-	GetDocument()->CurSeconds = 0;
-
 }
 
 

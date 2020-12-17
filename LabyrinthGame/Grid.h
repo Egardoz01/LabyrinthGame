@@ -1,14 +1,19 @@
 #pragma once
 
-class Cell
+class Cell : public CObject
 {
 public:
 	bool top;
 	bool right;
+public:
+	virtual void Serialize(CArchive& ar);
+	Cell();
+protected:
+	DECLARE_SERIAL(Cell)
 };
 
 
-class Grid
+class Grid : public CObject
 {
 public:
 	Cell **grid;
@@ -16,8 +21,11 @@ public:
 	int nColumns;
 
 public:
-	Grid(int nRows, int nColumns);
+	void Initialize(int nRows, int nColumns);
 	Grid();
+	virtual void Serialize(CArchive& ar);
 private:
 	void GenerateLabyrynth();
+protected:
+	DECLARE_SERIAL(Grid)
 };
