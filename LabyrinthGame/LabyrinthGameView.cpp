@@ -276,5 +276,6 @@ void CLabyrinthGameView::StartGame()
 void CLabyrinthGameView::OnNewGame()
 {
 	GetDocument()->StartGame();
-	StartGame();
+	if(GetDocument()->GameStarted)
+		StartGame();
 }

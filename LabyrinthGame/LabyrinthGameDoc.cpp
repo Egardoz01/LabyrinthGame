@@ -13,7 +13,7 @@
 #include "LabyrinthGameView.h"
 #include <propkey.h>
 #include "CongratDialog.h"
-
+#include "StartGameForm.h"
 /*
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -43,8 +43,33 @@ CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 
 void CLabyrinthGameDoc::StartGame()
 {
+
+	StartGameForm frm;
+	frm.DoModal();
+
+	if (!frm.DialogResult)
+		return;
+
 	GameStarted = true;
-	LGrid.Initialize(5, 5);
+	int nRows;
+	int nColumns;
+	switch (frm.Level2)
+	{
+	case EASY:
+		nRows = 5;
+		nColumns = 5;
+		break;
+	case MEDIUM:
+		nRows = 20;
+		nColumns = 20;
+		break;
+	case HARD:
+		nRows = 20;
+		nColumns = 40;
+		break;
+
+	}
+	LGrid.Initialize(nRows, nColumns);
 
 	MouceCell_x = 0;
 	MouceCell_y = 0;
@@ -52,6 +77,7 @@ void CLabyrinthGameDoc::StartGame()
 	CheeseCell_y = LGrid.nRows - 1;
 
 	CurSeconds = 0;
+	
 }
 
 void CLabyrinthGameDoc::DoCongratulations(CString text)
