@@ -24,6 +24,7 @@ IMPLEMENT_DYNCREATE(CLabyrinthGameView, CView)
 BEGIN_MESSAGE_MAP(CLabyrinthGameView, CView)
 	ON_WM_KEYDOWN()
 	ON_WM_TIMER()
+	ON_COMMAND(ID_NEW_GAME, &CLabyrinthGameView::OnNewGame)
 END_MESSAGE_MAP()
 
 
@@ -52,13 +53,16 @@ BOOL CLabyrinthGameView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CLabyrinthGameView::OnDraw(CDC* pDC)
 {
-	CLabyrinthGameDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
+	CLabyrinthGameDoc* doc = GetDocument();
+	ASSERT_VALID(doc);
+	if (!doc)
 		return;
 
-	DrawMouse(pDC->m_hDC);
-	DrawGrid(pDC);
+	if (doc->GameStarted)
+	{
+		DrawMouse(pDC->m_hDC);
+		DrawGrid(pDC);
+	}
 }
 
 
@@ -232,20 +236,7 @@ void CLabyrinthGameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
-	cellHeight = 35;
-	cellWidth = 35;
-	sPoint = CPoint(5, 50);
 	
-
-	
-	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-
-	ResizeWindow();
-
-	
-    mainTimer = SetTimer(1, 1000, NULL);
-
 }
 
 
@@ -257,7 +248,33 @@ void CLabyrinthGameView::OnTimer(UINT_PTR nIDEvent)
 	CView::OnTimer(nIDEvent);
 }
 
-void CLabyrinthGameView::KillMainTimer()
+void CLabyrinthGameView::FinishGame()
 {
 	KillTimer(mainTimer);
+	RedrawWindow();
+}
+
+void CLabyrinthGameView::StartGame()
+{
+	cellHeight = 35;
+	cellWidth = 35;
+	sPoint = CPoint(5, 50);
+
+
+
+	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+	ResizeWindow();
+
+
+	mainTimer = SetTimer(1, 1000, NULL);
+
+}
+
+
+void CLabyrinthGameView::OnNewGame()
+{
+	GetDocument()->StartGame();
+	StartGame();
 }

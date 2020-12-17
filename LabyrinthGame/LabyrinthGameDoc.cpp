@@ -26,6 +26,8 @@
 IMPLEMENT_DYNCREATE(CLabyrinthGameDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLabyrinthGameDoc, CDocument)
+//	ON_COMMAND(ID_NEW_GAME, &CLabyrinthGameDoc::OnNewGame)
+//ON_COMMAND(ID_NEW_GAME, &CLabyrinthGameDoc::OnNewGame)
 END_MESSAGE_MAP()
 
 
@@ -34,9 +36,16 @@ END_MESSAGE_MAP()
 CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 {
 
-	
+	GameStarted = false;
+	LoadSave = false;
+
+}
+
+void CLabyrinthGameDoc::StartGame()
+{
+	GameStarted = true;
 	LGrid.Initialize(5, 5);
-	
+
 	MouceCell_x = 0;
 	MouceCell_y = 0;
 	CheeseCell_x = LGrid.nColumns - 1;
@@ -62,17 +71,31 @@ void CLabyrinthGameDoc::CheckForGameFinish()
 
 void CLabyrinthGameDoc::FinishGame()
 {
+	GameStarted = false;
 	CLabyrinthGameView * curView = NULL;
 	POSITION pos = GetFirstViewPosition();
 	if (pos != NULL)
+	{
 		curView = (CLabyrinthGameView*)GetNextView(pos);
-	curView->KillMainTimer();
+		curView->FinishGame();
+	}
 	CString strCongratulations;
 	strCongratulations.Format(_T("CONGRATULATIONS!!! IT TOOK %d sec to pass the labyrinth"), CurSeconds);
 
 	DoCongratulations(strCongratulations);
 
 }
+
+/*
+void CLabyrinthGameView* CLabyrinthGameDoc::GetView()
+{
+	CLabyrinthGameView * curView = NULL;
+	POSITION pos = GetFirstViewPosition();
+	if (pos != NULL)
+		curView = (CLabyrinthGameView*)GetNextView(pos);
+
+	return curView;
+}*/
 
 void CLabyrinthGameDoc::RightStep()
 {
@@ -150,6 +173,7 @@ void CLabyrinthGameDoc::Serialize(CArchive& ar)
 	{
 		ar >> MouceCell_x >> MouceCell_y >> CheeseCell_x >> CheeseCell_y >> CurSeconds;
 		LoadSave = true;
+		StartGame();
 	}
 
 	LGrid.Serialize(ar);
@@ -225,3 +249,5 @@ void CLabyrinthGameDoc::Dump(CDumpContext& dc) const
 
 
 // CLabyrinthGameDoc commands
+
+

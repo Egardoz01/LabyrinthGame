@@ -1,4 +1,4 @@
-
+﻿
 // LabyrinthGameDoc.h : interface of the CLabyrinthGameDoc class
 //
 #include "Grid.h"
@@ -21,7 +21,7 @@ public:
 	int CheeseCell_y;
 	int CurSeconds;
 	bool LoadSave;
-	
+	bool GameStarted;
 // Operations
 public:
 
@@ -37,6 +37,7 @@ public:
 
 // Implementation
 public:
+	void StartGame();
 	void DoCongratulations(CString text);
 	void CheckForGameFinish();
 	void RightStep();
@@ -44,6 +45,7 @@ public:
 	void UpStep();
 	void DownStep();
 	virtual ~CLabyrinthGameDoc();
+	//CLabyrinthGameView* GetView()  const; //почему-то студия не хочет делать такой метод
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -62,4 +64,7 @@ protected:
 	// Helper function that sets search content for a Search Handler
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+//	afx_msg void OnNewGame();
+//	afx_msg void OnNewGame();
 };
