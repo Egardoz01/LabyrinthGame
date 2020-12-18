@@ -1,4 +1,4 @@
-
+﻿
 // LabyrinthGameDoc.cpp : implementation of the CLabyrinthGameDoc class
 //
 
@@ -38,7 +38,7 @@ CLabyrinthGameDoc::CLabyrinthGameDoc() noexcept
 
 	GameStarted = false;
 	LoadSave = false;
-
+	LGrid.Initialize(20, 20);
 }
 
 void CLabyrinthGameDoc::StartGame()
@@ -91,25 +91,28 @@ void CLabyrinthGameDoc::CheckForGameFinish()
 {
 	if (MouceCell_x == CheeseCell_x && MouceCell_y == CheeseCell_y)
 	{
-		FinishGame();
+		FinishGame(true);
 	}
 }
 
-void CLabyrinthGameDoc::FinishGame()
+void CLabyrinthGameDoc::FinishGame(bool congrat)
 {
 	GameStarted = false;
 	CLabyrinthGameView * curView = NULL;
 	POSITION pos = GetFirstViewPosition();
+	LGrid.Initialize(20, 20);
 	if (pos != NULL)
 	{
 		curView = (CLabyrinthGameView*)GetNextView(pos);
 		curView->FinishGame();
 	}
-	CString strCongratulations;
-	strCongratulations.Format(_T("CONGRATULATIONS!!! IT TOOK %d sec to pass the labyrinth"), CurSeconds);
+	if (congrat)
+	{
+		CString strCongratulations;
+		strCongratulations.Format(_T("ПОЗДРАВЛЯЕМ!!!\nВы выбрались из DUNGEON за %d секунд"), CurSeconds);
 
-	DoCongratulations(strCongratulations);
-
+		DoCongratulations(strCongratulations);
+	}
 }
 
 /*

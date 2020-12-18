@@ -8,6 +8,7 @@
 
 void Grid::Initialize(int _nRows, int _nColumns)
 {
+	ClearGrid();
 	nRows = _nRows;
 	nColumns = _nColumns;
 
@@ -25,10 +26,21 @@ void Grid::Initialize(int _nRows, int _nColumns)
 	GenerateLabyrynth();
 }
 
+void Grid::ClearGrid()
+{
+	for (int i = 0; i < nRows; i++)
+		delete[] this->grid[i];
+	delete[] this->grid;
+	nRows = 0;
+	nColumns = 0;
+}
+
 Grid::Grid()
 {
-	
+	nRows = 0;
+	nColumns = 0;
 }
+
 
 void Grid::GenerateLabyrynth()
 {

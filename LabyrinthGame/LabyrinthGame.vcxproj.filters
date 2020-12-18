@@ -98,5 +98,17 @@
     <Image Include="congratulations.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="doggy1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="doggy2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="doggy3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

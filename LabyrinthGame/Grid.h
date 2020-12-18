@@ -22,6 +22,7 @@ public:
 
 public:
 	void Initialize(int nRows, int nColumns);
+	void ClearGrid();
 	Grid();
 	virtual void Serialize(CArchive& ar);
 private:

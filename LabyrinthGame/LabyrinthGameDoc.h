@@ -38,11 +38,13 @@ public:
 // Implementation
 public:
 	void StartGame();
+	void FinishGame(bool congrat);
 	void DoCongratulations(CString text);
 	void CheckForGameFinish();
 	void RightStep();
 	void LeftStep();
 	void UpStep();
+
 	void DownStep();
 	virtual ~CLabyrinthGameDoc();
 	//CLabyrinthGameView* GetView()  const; //почему-то студия не хочет делать такой метод
@@ -53,7 +55,7 @@ public:
 #endif
 private:
 
-	void FinishGame();
+	
 protected:
 
 // Generated message map functions

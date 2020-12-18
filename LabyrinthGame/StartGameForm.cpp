@@ -27,6 +27,7 @@ void StartGameForm::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Radio(pDX, IDC_EASY, Level2);
+	DDX_Control(pDX, IDC_IMAGE_LEVEL, picture);
 }
 
 
@@ -51,16 +52,19 @@ void StartGameForm::OnBnClickedStart()
 void StartGameForm::OnBnClickedEasy()
 {
 	Level2 = EASY;
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy1.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }
 
 
 void StartGameForm::OnBnClickedMedium()
 {
 	Level2 = MEDIUM;
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy2.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }
 
 
 void StartGameForm::OnBnClickedHard()
 {
 	Level2 = HARD;
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy3.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }

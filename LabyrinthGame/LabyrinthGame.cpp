@@ -115,7 +115,7 @@ BOOL CLabyrinthGameApp::InitInstance()
 	
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
-	m_pMainWnd->SetWindowTextW(L"МЫШ В ЛАБИРИНТЕ");
+	m_pMainWnd->SetWindowTextW(L"МЫШ В DUNGEON");
 	return TRUE;
 }
 

@@ -23,22 +23,28 @@
 #define IDD_CCONGRAT_DIALOG             312
 #define IDB_BITMAP3                     320
 #define IDD_START_GAME                  321
+#define IDB_BITMAP4                     328
+#define IDB_BITMAP5                     329
+#define IDB_BITMAP6                     330
 #define IDC_CongratText                 1000
 #define IDC_START                       1002
 #define IDC_EASY                        1003
 #define IDC_MEDIUM                      1004
 #define IDC_RADIO3                      1005
 #define IDC_HARD                        1005
+#define IDC_IMAGE_LEVEL                 1006
 #define ID_FILE_32771                   32771
 #define ID_NEW_GAME                     32772
+#define ID_32773                        32773
+#define ID_FINISH_GAME                  32774
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_RESOURCE_VALUE        331
+#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

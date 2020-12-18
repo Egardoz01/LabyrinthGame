@@ -28,4 +28,5 @@ public:
 //	BOOL EasyChecked;
 	int Level2;
 	bool DialogResult;
+	CStatic picture;
 };

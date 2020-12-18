@@ -25,6 +25,9 @@ BEGIN_MESSAGE_MAP(CLabyrinthGameView, CView)
 	ON_WM_KEYDOWN()
 	ON_WM_TIMER()
 	ON_COMMAND(ID_NEW_GAME, &CLabyrinthGameView::OnNewGame)
+	ON_COMMAND(ID_FINISH_GAME, &CLabyrinthGameView::OnFinishGame)
+	ON_UPDATE_COMMAND_UI(ID_FINISH_GAME, &CLabyrinthGameView::OnUpdateFinishGame)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &CLabyrinthGameView::OnUpdateFileSave)
 END_MESSAGE_MAP()
 
 
@@ -60,8 +63,14 @@ void CLabyrinthGameView::OnDraw(CDC* pDC)
 
 	if (doc->GameStarted)
 	{
+		DrawTime(pDC);
 		DrawMouse(pDC->m_hDC);
 		DrawGrid(pDC);
+	}else
+	{
+		DrawGrid(pDC);
+		DrawInitialScreen(pDC);
+	
 	}
 }
 
@@ -104,11 +113,78 @@ void CLabyrinthGameView::DrawMouse(HDC hdc)
 
 }
 
+void CLabyrinthGameView::DrawInitialScreen(CDC * pDC)
+{
+	CLabyrinthGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	RECT ClientRect;
+	CFont Font;
+	LOGFONT LF;
+	int LineHeight;
+	CFont *PtrOldFont;
+	int X, Y;
+	
+	CFont TempFont;
+	
+	//TempFont.CreateStockObject(SYSTEM_FONT);
+
+	TempFont.CreateStockObject(SYSTEM_FIXED_FONT);
+	TempFont.GetObject(sizeof(LOGFONT), &LF);
+	
+	LF.lfCharSet = RUSSIAN_CHARSET; //RUSSIAN_CHARSET
+	//LF.lfWeight = FW_BOLD;
+
+	//LF.lfItalic = 1;
+
+	//LF.lfUnderline = 1;
+
+
+	Font.CreateFontIndirect(&LF);
+	PtrOldFont = pDC->SelectObject(&Font);
+
+	GetClientRect(&ClientRect);
+	
+	pDC->SetTextAlign(TA_CENTER);
+	X = (ClientRect.left + ClientRect.right) / 2;
+	
+	// установка цвета текста и режима фона:
+	pDC->SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
+	pDC->SetBkMode(TRANSPARENT);
+
+	// вывод строк текста:
+	LineHeight = LF.lfHeight;
+	Y = (ClientRect.top + ClientRect.bottom) / 2 - 50;
+
+	CRect rect(X-200, Y-50, X+200, Y+80);
+	pDC->Rectangle(rect);
+
+	CBrush brush;
+	brush.CreateSolidBrush(RGB(210, 210, 210));
+	pDC->FillRect(&rect, &brush);
+	
+
+	pDC->TextOut(X, Y, L"Добро пожаловать в ИГРУ!!!!");
+	Y += LineHeight;
+	pDC->TextOut(X, Y,_T("Помогите маленькому МЫШу, выбраться из DUNGEON"));
+	Y += LineHeight;
+	pDC->TextOut(X, Y,_T("Для этого, ему нужно залутать здоровый кусок СЫРа."));
+	Y += LineHeight;
+	pDC->TextOut(X, Y, _T("Только тогда, он сможет выбраться из DUNGEON"));
+
+	
+
+
+	// отмена выбора шрифта:
+	pDC->SelectObject(PtrOldFont);
+}
+
 
 void CLabyrinthGameView::DrawGrid(CDC* pDC)
 {
 	CLabyrinthGameDoc* doc = GetDocument();
-	//for(int i = 0; i<pDoc->grid.)
 	
 	int n = doc->LGrid.nRows;
 	int m = doc->LGrid.nColumns;
@@ -119,13 +195,8 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 	pDC->LineTo(sPoint.x, sPoint.y + n * height);
 	pDC->MoveTo(sPoint.x, sPoint.y + n * height);
 	pDC->LineTo(sPoint.x + m * width, sPoint.y + n * height);//рисуем границы
-	RECT rect;
-	rect.left = 5;
-	rect.top = 5;
-	CString strTime;
-	strTime.Format(_T("Текущее время %d%d:%d%d"), ((doc->CurSeconds / 600) % 10), ((doc->CurSeconds / 60) % 10), ((doc->CurSeconds / 10)%6), (doc->CurSeconds % 10));
+	
 
-	pDC->DrawText(strTime, &rect, DT_SINGLELINE | DT_NOCLIP);
 
 	for (int i = 0; i < n; i++)
 	{
@@ -150,6 +221,17 @@ void CLabyrinthGameView::DrawGrid(CDC* pDC)
 			curX += width;
 		}
 	}
+}
+
+void CLabyrinthGameView::DrawTime(CDC * pDC)
+{
+	CLabyrinthGameDoc* doc = GetDocument();
+	RECT rect;
+	rect.left = 5;
+	rect.top = 5;
+	CString strTime;
+	strTime.Format(_T("Текущее время %d%d:%d%d"), ((doc->CurSeconds / 600) % 10), ((doc->CurSeconds / 60) % 10), ((doc->CurSeconds / 10) % 6), (doc->CurSeconds % 10));
+	pDC->DrawText(strTime, &rect, DT_SINGLELINE | DT_NOCLIP);
 }
 
 
@@ -202,7 +284,7 @@ void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-void CLabyrinthGameView::ResizeWindow()
+void CLabyrinthGameView::ResizeWindowForGame()
 {
 
 	CLabyrinthGameDoc* doc = GetDocument();
@@ -230,13 +312,21 @@ void CLabyrinthGameView::ResizeWindow()
 	
 }
 
+void CLabyrinthGameView::ResizeWindowForWaiting()
+{
+	sPoint = CPoint(5, 5);
+	cellHeight = 35;
+	cellWidth = 35;
+	ResizeWindowForGame();
+}
+
 
 
 void CLabyrinthGameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
-	
+	ResizeWindowForWaiting();
 }
 
 
@@ -251,7 +341,9 @@ void CLabyrinthGameView::OnTimer(UINT_PTR nIDEvent)
 void CLabyrinthGameView::FinishGame()
 {
 	KillTimer(mainTimer);
+	ResizeWindowForWaiting();
 	RedrawWindow();
+
 }
 
 void CLabyrinthGameView::StartGame()
@@ -265,7 +357,7 @@ void CLabyrinthGameView::StartGame()
 	hBitmapMouse = (HBITMAP)LoadImage(NULL, L"mouse.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	hBitmapCheese = (HBITMAP)LoadImage(NULL, L"cheese.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
-	ResizeWindow();
+	ResizeWindowForGame();
 
 
 	mainTimer = SetTimer(1, 1000, NULL);
@@ -278,4 +370,23 @@ void CLabyrinthGameView::OnNewGame()
 	GetDocument()->StartGame();
 	if(GetDocument()->GameStarted)
 		StartGame();
+}
+
+
+void CLabyrinthGameView::OnFinishGame()
+{
+
+	GetDocument()->FinishGame(false);
+}
+
+
+void CLabyrinthGameView::OnUpdateFinishGame(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->GameStarted);
+}
+
+
+void CLabyrinthGameView::OnUpdateFileSave(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->GameStarted);
 }

@@ -55,8 +55,11 @@ protected:
 
 private:
 	void DrawGrid(CDC* pDC);
+	void DrawTime(CDC* pDC);
 	void DrawMouse(HDC hdc);
-	void ResizeWindow();
+	void DrawInitialScreen(CDC* pDC);
+	void ResizeWindowForGame();
+	void ResizeWindowForWaiting();
 
 public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -64,6 +67,9 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnNewGame();
+	afx_msg void OnFinishGame();
+	afx_msg void OnUpdateFinishGame(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateFileSave(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // debug version in LabyrinthGameView.cpp

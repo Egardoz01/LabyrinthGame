@@ -218,7 +218,11 @@
   <ItemGroup>
     <Image Include="cheese.bmp" />
     <Image Include="congratulations.bmp" />
+    <Image Include="doggy1.bmp" />
+    <Image Include="doggy2.bmp" />
+    <Image Include="doggy3.bmp" />
     <Image Include="mouse.bmp" />
+    <Image Include="res\bitmap4.bmp" />
     <Image Include="res\LabyrinthGame.ico" />
     <Image Include="res\LabyrinthGameDoc.ico" />
   </ItemGroup>
