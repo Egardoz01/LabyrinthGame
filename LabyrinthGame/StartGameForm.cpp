@@ -52,19 +52,19 @@ void StartGameForm::OnBnClickedStart()
 void StartGameForm::OnBnClickedEasy()
 {
 	Level2 = EASY;
-	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy1.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"gerry.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }
 
 
 void StartGameForm::OnBnClickedMedium()
 {
 	Level2 = MEDIUM;
-	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy2.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"rat.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }
 
 
 void StartGameForm::OnBnClickedHard()
 {
 	Level2 = HARD;
-	picture.SetBitmap((HBITMAP)LoadImage(0, L"doggy3.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+	picture.SetBitmap((HBITMAP)LoadImage(0, L"splinter.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 }

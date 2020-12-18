@@ -221,10 +221,13 @@
     <Image Include="doggy1.bmp" />
     <Image Include="doggy2.bmp" />
     <Image Include="doggy3.bmp" />
+    <Image Include="gerry.bmp" />
     <Image Include="mouse.bmp" />
+    <Image Include="rat.bmp" />
     <Image Include="res\bitmap4.bmp" />
     <Image Include="res\LabyrinthGame.ico" />
     <Image Include="res\LabyrinthGameDoc.ico" />
+    <Image Include="splinter.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

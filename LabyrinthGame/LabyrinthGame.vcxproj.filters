@@ -110,5 +110,14 @@
     <Image Include="doggy3.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="splinter.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="gerry.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rat.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
