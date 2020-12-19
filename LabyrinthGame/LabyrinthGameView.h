@@ -70,6 +70,8 @@ public:
 	afx_msg void OnFinishGame();
 	afx_msg void OnUpdateFinishGame(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateFileSave(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateNewGame(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // debug version in LabyrinthGameView.cpp

@@ -28,6 +28,8 @@ BEGIN_MESSAGE_MAP(CLabyrinthGameView, CView)
 	ON_COMMAND(ID_FINISH_GAME, &CLabyrinthGameView::OnFinishGame)
 	ON_UPDATE_COMMAND_UI(ID_FINISH_GAME, &CLabyrinthGameView::OnUpdateFinishGame)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &CLabyrinthGameView::OnUpdateFileSave)
+	ON_UPDATE_COMMAND_UI(ID_NEW_GAME, &CLabyrinthGameView::OnUpdateNewGame)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CLabyrinthGameView::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -261,7 +263,8 @@ CLabyrinthGameDoc* CLabyrinthGameView::GetDocument() const // non-debug version 
 void CLabyrinthGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CLabyrinthGameDoc* doc = GetDocument();
-
+	if (!doc->GameStarted)
+		return;
 	switch (nChar)
 	{
 	case VK_LEFT:	// стрелка влево
@@ -292,7 +295,6 @@ void CLabyrinthGameView::ResizeWindowForGame()
 	ASSERT_VALID(doc);
 	if (!doc)
 		return;
-	
 
 	CRect rcClient, rcWindow;
 	GetClientRect(&rcClient);
@@ -307,9 +309,6 @@ void CLabyrinthGameView::ResizeWindowForGame()
 		cellHeight * doc->LGrid.nRows + nHeightDiff + sPoint.y + 5;
 
 	GetParentFrame()->MoveWindow(&rcWindow);
-
-
-	
 }
 
 void CLabyrinthGameView::ResizeWindowForWaiting()
@@ -367,7 +366,8 @@ void CLabyrinthGameView::StartGame()
 
 void CLabyrinthGameView::OnNewGame()
 {
-	GetDocument()->StartGame();
+	if(!GetDocument()->LoadSave)
+		GetDocument()->StartGame();
 	if(GetDocument()->GameStarted)
 		StartGame();
 }
@@ -375,7 +375,7 @@ void CLabyrinthGameView::OnNewGame()
 
 void CLabyrinthGameView::OnFinishGame()
 {
-
+	
 	GetDocument()->FinishGame(false);
 }
 
@@ -389,4 +389,16 @@ void CLabyrinthGameView::OnUpdateFinishGame(CCmdUI *pCmdUI)
 void CLabyrinthGameView::OnUpdateFileSave(CCmdUI *pCmdUI)
 {
 	pCmdUI->Enable(GetDocument()->GameStarted);
+}
+
+
+void CLabyrinthGameView::OnUpdateNewGame(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(!GetDocument()->GameStarted);
+}
+
+
+void CLabyrinthGameView::OnUpdateFileOpen(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(!GetDocument()->GameStarted);
 }

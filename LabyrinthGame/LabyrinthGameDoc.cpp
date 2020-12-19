@@ -97,6 +97,7 @@ void CLabyrinthGameDoc::CheckForGameFinish()
 
 void CLabyrinthGameDoc::FinishGame(bool congrat)
 {
+
 	GameStarted = false;
 	CLabyrinthGameView * curView = NULL;
 	POSITION pos = GetFirstViewPosition();
@@ -113,6 +114,7 @@ void CLabyrinthGameDoc::FinishGame(bool congrat)
 
 		DoCongratulations(strCongratulations);
 	}
+	OnNewDocument();
 }
 
 /*
@@ -175,16 +177,16 @@ CLabyrinthGameDoc::~CLabyrinthGameDoc()
 
 }
 
-BOOL CLabyrinthGameDoc::OnNewDocument()
-{
-	if (!CDocument::OnNewDocument())
-		return FALSE;
-
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
-
-	return TRUE;
-}
+//BOOL CLabyrinthGameDoc::OnNewDocument()
+//{
+//	if (!CDocument::OnNewDocument())
+//		return FALSE;
+//
+//	// TODO: add reinitialization code here
+//	// (SDI documents will reuse this document)
+//
+//	return TRUE;
+//}
 
 
 
@@ -201,12 +203,30 @@ void CLabyrinthGameDoc::Serialize(CArchive& ar)
 	else
 	{
 		ar >> MouceCell_x >> MouceCell_y >> CheeseCell_x >> CheeseCell_y >> CurSeconds;
-		LoadSave = true;
-		StartGame();
+		
 	}
 
 	LGrid.Serialize(ar);
+	if (!ar.IsStoring())
+		LoadGame();
 }
+
+
+void CLabyrinthGameDoc::LoadGame()
+{
+	LoadSave = true;
+	GameStarted = true;
+	CLabyrinthGameView * curView = NULL;
+	POSITION pos = GetFirstViewPosition();
+	LGrid.Initialize(20, 20);
+	if (pos != NULL)
+	{
+		curView = (CLabyrinthGameView*)GetNextView(pos);
+		curView->OnNewGame();
+	}
+	LoadSave = false;
+}
+
 
 #ifdef SHARED_HANDLERS
 

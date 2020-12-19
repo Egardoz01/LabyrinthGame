@@ -27,7 +27,7 @@ public:
 
 // Overrides
 public:
-	virtual BOOL OnNewDocument();
+//	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 	
 #ifdef SHARED_HANDLERS
@@ -44,7 +44,7 @@ public:
 	void RightStep();
 	void LeftStep();
 	void UpStep();
-
+	void LoadGame();
 	void DownStep();
 	virtual ~CLabyrinthGameDoc();
 	//CLabyrinthGameView* GetView()  const; //почему-то студия не хочет делать такой метод
