@@ -29,7 +29,8 @@ BEGIN_MESSAGE_MAP(CLabyrinthGameView, CView)
 	ON_UPDATE_COMMAND_UI(ID_FINISH_GAME, &CLabyrinthGameView::OnUpdateFinishGame)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &CLabyrinthGameView::OnUpdateFileSave)
 	ON_UPDATE_COMMAND_UI(ID_NEW_GAME, &CLabyrinthGameView::OnUpdateNewGame)
-	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CLabyrinthGameView::OnUpdateFileOpen)
+//	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CLabyrinthGameView::OnUpdateFileOpen)
+ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CLabyrinthGameView::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -313,10 +314,13 @@ void CLabyrinthGameView::ResizeWindowForGame()
 
 void CLabyrinthGameView::ResizeWindowForWaiting()
 {
-	sPoint = CPoint(5, 5);
-	cellHeight = 35;
-	cellWidth = 35;
-	ResizeWindowForGame();
+	if (!GetDocument()->GameStarted)
+	{
+		sPoint = CPoint(5, 5);
+		cellHeight = 35;
+		cellWidth = 35;
+		ResizeWindowForGame();
+	}
 }
 
 
@@ -396,6 +400,8 @@ void CLabyrinthGameView::OnUpdateNewGame(CCmdUI *pCmdUI)
 {
 	pCmdUI->Enable(!GetDocument()->GameStarted);
 }
+
+
 
 
 void CLabyrinthGameView::OnUpdateFileOpen(CCmdUI *pCmdUI)

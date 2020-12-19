@@ -106,6 +106,7 @@ void CLabyrinthGameDoc::FinishGame(bool congrat)
 	{
 		curView = (CLabyrinthGameView*)GetNextView(pos);
 		curView->FinishGame();
+
 	}
 	if (congrat)
 	{
@@ -115,6 +116,7 @@ void CLabyrinthGameDoc::FinishGame(bool congrat)
 		DoCongratulations(strCongratulations);
 	}
 	OnNewDocument();
+	
 }
 
 /*
@@ -218,7 +220,6 @@ void CLabyrinthGameDoc::LoadGame()
 	GameStarted = true;
 	CLabyrinthGameView * curView = NULL;
 	POSITION pos = GetFirstViewPosition();
-	LGrid.Initialize(20, 20);
 	if (pos != NULL)
 	{
 		curView = (CLabyrinthGameView*)GetNextView(pos);

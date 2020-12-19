@@ -143,6 +143,7 @@ void  Grid::Serialize(CArchive& ar)
 	else
 	{
 		ar >> nRows >> nColumns;
+		Initialize(nRows, nColumns);
 	}
 
 	for (int i = 0; i < nRows; i++)
